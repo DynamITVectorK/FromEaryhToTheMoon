@@ -2,12 +2,6 @@ name: ' CI/CD'
 
 on:
   workflow_dispatch:
-    inputs:
-      runCurrentTests:
-        description: "Run test codeunits (Current workflow)"
-        type: boolean
-        required: false
-        default: true
 
 defaults:
   run:
