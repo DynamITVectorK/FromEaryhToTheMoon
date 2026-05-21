@@ -1,0 +1,22 @@
+{
+  "id": "2d43f19a-17fb-45f9-9590-c4274d595d22",
+  "name": "HolaMundoClientes",
+  "publisher": "FromEarthToTheMoon",
+  "version": "1.0.0.0",
+  "brief": "Extensión de ejemplo para lista de clientes",
+  "description": "Muestra un mensaje de Hola Mundo al abrir la lista de clientes.",
+  "runtime": "13.0",
+  "application": "26.0.0.0",
+  "platform": "26.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Sandbox",
+      "type": "al",
+      "request": "launch",
+      "server": "http://businesscentral.dynamics.com",
+      "serverInstance": "sandbox",
+      "authentication": "UserPassword",
+      "startupObjectType": "Page",
+      "startupObjectId": 22,
+      "schemaUpdateMode": "Synchronize",
+      "breakOnError": "All",
+      "launchBrowser": true,
+      "enableLongRunningSqlStatements": true,
+      "enableSqlInformationDebugger": true
+    }
+  ]
+}
