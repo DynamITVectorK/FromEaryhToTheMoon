@@ -1,0 +1,5 @@
+{
+  "al.enableCodeActions": true,
+  "al.packageCachePath": ".alpackages",
+  "files.eol": "\n"
+}
