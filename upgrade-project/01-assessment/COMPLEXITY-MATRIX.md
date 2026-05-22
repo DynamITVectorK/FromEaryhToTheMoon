@@ -83,3 +83,23 @@ Las siguientes personalizaciones requieren atención especial y deben incluirse 
 ---
 
 *Referencia: [AL Language Compatibility](https://learn.microsoft.com/es-es/dynamics365/business-central/dev-itpro/developer/devenv-al-compatibility)*
+
+---
+
+## Entrada inicial desde inventario diferencial
+
+Para arrancar el scoring con datos reales, usar:
+
+- `upgrade-project/01-assessment/tools/output/differential-inventory.csv`
+
+Regla de arranque sugerida (baseline):
+
+| Señal en baseline | Riesgo inicial |
+|---|---|
+| DotNet / Automation / COM detectado | 🔴 Alta |
+| Modified Standard Object en Codeunit/Table/MenuSuite | 🔴 Alta |
+| Modified Standard Object (resto) | 🟡 Media |
+| New Customer Object (50000+) | 🟡 Media |
+| Unchanged | 🟢 Baja |
+
+> El riesgo inicial debe ajustarse con análisis funcional, dependencias y volumen de datos antes de estimación final.

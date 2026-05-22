@@ -138,3 +138,18 @@ Los siguientes objetos estándar de Microsoft han sido modificados en NAV 2016 m
 | **TOTAL** | **[COMPLETAR]** | **[COMPLETAR]** | **[COMPLETAR]** |
 
 *Estimación con factor de complejidad incluido. Agregar 20-30% de buffer para imprevistos.*
+
+---
+
+## Inventario diferencial generado automáticamente
+
+> Esta sección se alimenta desde `upgrade-project/01-assessment/tools/generate-object-inventory.ps1` usando el CSV generado por `compare-nav-objects.ps1`.
+>
+> Objetivo: baseline técnico inicial estándar NAV 2016 vs cliente NAV 2016.  
+> No sustituye revisión funcional/arquitectónica.
+
+| Campo | Valor |
+|---|---|
+| Fuente esperada | `upgrade-project/01-assessment/tools/output/differential-inventory.csv` |
+| Estado | Pendiente de generación con datos reales del cliente |
+| Revisión obligatoria | Arquitecto NAV/BC + consultor funcional |

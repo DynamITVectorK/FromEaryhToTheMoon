@@ -218,3 +218,24 @@ Documentar detalladamente cada personalización realizada sobre el estándar de 
 ---
 
 *Referencia: [Developing Extensions in AL](https://learn.microsoft.com/es-es/dynamics365/business-central/dev-itpro/developer/devenv-dev-overview)*
+
+---
+
+## Baseline automático desde comparación diferencial NAV 2016
+
+Este catálogo debe alimentarse inicialmente con los objetos clasificados por:
+
+- `Modified Standard Object`
+- `New Customer Object`
+- `Deleted/Missing`
+
+Fuente técnica:
+
+- `upgrade-project/01-assessment/tools/output/differential-inventory.csv`
+- `upgrade-project/01-assessment/tools/output/differential-inventory.md`
+
+| Estado diferencial | Acción recomendada en este catálogo |
+|---|---|
+| New Customer Object | Crear entrada CUST-* y evaluar conversión AL nueva |
+| Modified Standard Object | Crear entrada CUST-* y definir estrategia por extensión/eventos |
+| Deleted/Missing | Confirmar si eliminar, sustituir por estándar o AppSource |
