@@ -355,3 +355,22 @@ Para cada objeto a convertir, verificar:
 ---
 
 *Referencia: [AL Language Reference](https://learn.microsoft.com/es-es/dynamics365/business-central/dev-itpro/developer/devenv-al-language-reference)*
+
+---
+
+## Reglas de clasificación baseline (sin conversión AL)
+
+Previo a convertir, usar el baseline diferencial para decidir estrategia:
+
+| Caso detectado | Estrategia sugerida |
+|---|---|
+| Objeto ID >= 50000 y solo en cliente | Convertir/Revisar como objeto AL nuevo |
+| Tabla estándar modificada | TableExtension / revisar triggers |
+| Página estándar modificada | PageExtension |
+| Codeunit estándar modificada | Rediseño mediante eventos |
+| Report estándar modificado | ReportExtension o report nuevo |
+| XMLport | Revisar si sigue como XMLport o se sustituye por API |
+| MenuSuite | No migrar directamente; rediseñar navegación |
+| DotNet / Automation detectado | Bloqueo SaaS; requiere rediseño |
+
+> Estas reglas son iniciales para assessment. La decisión final se valida con análisis funcional y técnico.

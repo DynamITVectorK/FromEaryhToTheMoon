@@ -134,3 +134,19 @@ codeunit 50301 "[PREFIX] Sales Event Subscriber"
 ---
 
 *Referencia: [Publishing Events](https://learn.microsoft.com/es-es/dynamics365/business-central/dev-itpro/developer/devenv-publishing-events)*
+
+---
+
+## Candidatos de rediseño por baseline diferencial
+
+Usar el inventario diferencial para detectar rápidamente objetos estándar modificados que requieren patrón Publisher/Subscriber.
+
+Fuente:
+
+- `upgrade-project/01-assessment/tools/output/differential-inventory.csv`
+
+| Tipo | ID | Nombre | Estado NAV | Candidato a eventos | Nota técnica |
+|---|---:|---|---|---|---|
+| Codeunit | [COMPLETAR] | [COMPLETAR] | Modified Standard Object | Sí | Evaluar eventos estándar disponibles antes de rediseño |
+| Table | [COMPLETAR] | [COMPLETAR] | Modified Standard Object | Sí (table triggers/eventos) | Evitar lógica invasiva; priorizar extensiones + subscribers |
+| Page | [COMPLETAR] | [COMPLETAR] | Modified Standard Object | Parcial | Generalmente PageExtension + acciones/eventos |

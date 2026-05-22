@@ -100,3 +100,13 @@
 ---
 
 *Actualizar semanalmente en la reunión de estado técnico. Referencia: [AL Object Types](https://learn.microsoft.com/es-es/dynamics365/business-central/dev-itpro/developer/devenv-al-object-types)*
+
+---
+
+## Baseline inicial desde comparación NAV 2016 estándar vs cliente
+
+> Esta sección se completa con la salida de `upgrade-project/01-assessment/tools/output/differential-inventory.csv` y debe ser validada por arquitecto NAV/BC antes de iniciar conversión.
+
+| Tipo | ID | Nombre | Estado NAV | Estrategia AL sugerida | Riesgo | Prioridad | Notas |
+|---|---:|---|---|---|---|---|---|
+| [COMPLETAR] | [COMPLETAR] | [COMPLETAR] | [Unchanged / Modified Standard Object / New Customer Object / Deleted/Missing] | [COMPLETAR] | [High / Medium / Low] | [Alta/Media/Baja] | Baseline automático pendiente de revisión |
