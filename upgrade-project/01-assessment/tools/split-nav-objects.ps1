@@ -38,13 +38,23 @@ function Get-SafeFileNamePart {
     param([Parameter(Mandatory = $true)][string]$Name)
 
     $safe = $Name.Trim()
-    $safe = $safe -replace '[\\/:*?"<>|]', '_'
+    $safe = $safe -replace '[\\/:*?"<>\|]', '_'
     $safe = $safe -replace '\s+', '-'
     return $safe
 }
 
+function Write-Utf8NoBomLines {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][AllowEmptyString()][string[]]$Lines
+    )
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllLines($Path, $Lines, $utf8NoBom)
+}
+
 if (-not (Test-Path -LiteralPath $InputFile -PathType Leaf)) {
-    throw "No existe el archivo de entrada: $InputFile"
+    throw "No existe el archivo de entrada: $InputFile. Verifica la ruta y confirma que el TXT exportado de NAV 2016 esté disponible."
 }
 
 if (-not (Test-Path -LiteralPath $OutputRoot)) {
@@ -90,7 +100,7 @@ if ($null -ne $currentObject) {
 }
 
 if ($objects.Count -eq 0) {
-    Write-Warning "No se encontraron objetos reconocibles en el archivo: $InputFile"
+    Write-Warning "No se encontraron objetos NAV reconocibles en: $InputFile. Revisa que el archivo sea un export TXT válido de NAV 2016 con declaraciones OBJECT."
     return
 }
 
@@ -103,7 +113,7 @@ foreach ($obj in $objects) {
     $targetPath = Join-Path -Path $datasetFolder -ChildPath $fileName
 
     if ($PSCmdlet.ShouldProcess($targetPath, "Escribir objeto $($obj.Type) $($obj.Id)")) {
-        Set-Content -LiteralPath $targetPath -Value $obj.Lines -Encoding utf8BOM
+        Write-Utf8NoBomLines -Path $targetPath -Lines @($obj.Lines)
     }
 }
 

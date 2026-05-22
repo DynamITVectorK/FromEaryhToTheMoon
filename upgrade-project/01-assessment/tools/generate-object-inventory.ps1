@@ -12,13 +12,23 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+function Write-Utf8NoBomText {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$Content
+    )
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
 if (-not (Test-Path -LiteralPath $InputCsv -PathType Leaf)) {
-    throw "No existe el CSV de entrada: $InputCsv"
+    throw "No existe el CSV de entrada: $InputCsv. Primero ejecuta compare-nav-objects.ps1 para generar el inventario diferencial."
 }
 
 $rows = Import-Csv -LiteralPath $InputCsv
 if (-not $rows -or $rows.Count -eq 0) {
-    throw "El CSV no contiene filas: $InputCsv"
+    throw "El CSV no contiene filas: $InputCsv. Reejecuta compare-nav-objects.ps1 y valida que existan objetos comparables."
 }
 
 function New-SummaryLines {
@@ -101,7 +111,7 @@ if ($DryRun) {
 }
 
 if ($PSCmdlet.ShouldProcess($InventoryFile, 'Actualizar inventario diferencial en Markdown')) {
-    Set-Content -LiteralPath $InventoryFile -Value $updatedContent -Encoding utf8BOM
+    Write-Utf8NoBomText -Path $InventoryFile -Content $updatedContent
 }
 
 Write-Host "Documento actualizado: $InventoryFile"

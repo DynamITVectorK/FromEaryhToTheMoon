@@ -17,11 +17,22 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$dotNetComPattern = '(?i)\bDotNet\b|\bAutomation\b|\bCOM\b|\bCreateObject\b'
+
+function Write-Utf8NoBomLines {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][AllowEmptyString()][string[]]$Lines
+    )
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllLines($Path, $Lines, $utf8NoBom)
+}
 
 function Read-NavObjectFile {
     param([Parameter(Mandatory = $true)][System.IO.FileInfo]$File)
 
-    $preview = Get-Content -LiteralPath $File.FullName -TotalCount 40
+    $preview = Get-Content -LiteralPath $File.FullName -TotalCount 200
     $headerLine = $preview | Where-Object { $_ -match '^\s*OBJECT\s+(Table|Report|Codeunit|XMLport|MenuSuite|Page|Query)\s+(\d+)\s+(.+?)\s*$' } | Select-Object -First 1
 
     if (-not $headerLine) {
@@ -29,15 +40,13 @@ function Read-NavObjectFile {
     }
 
     $null = $headerLine -match '^\s*OBJECT\s+(Table|Report|Codeunit|XMLport|MenuSuite|Page|Query)\s+(\d+)\s+(.+?)\s*$'
-    $raw = Get-Content -LiteralPath $File.FullName -Raw
-
     return [PSCustomObject]@{
         ObjectType       = $matches[1]
         ObjectID         = [int]$matches[2]
         ObjectName       = $matches[3].Trim()
         FilePath         = $File.FullName
         Hash             = (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash
-        HasDotNetOrCom   = ($raw -match '(?i)\bDotNet\b|DotNet(?=[\.\(])|\bAutomation\b|\bCOM\b')
+        HasDotNetOrCom   = (($preview -join "`n") -match $dotNetComPattern)
     }
 }
 
@@ -49,6 +58,7 @@ function Get-SuggestedStrategy {
         [bool]$HasDotNetOrCom
     )
 
+    # Strategy and risk are calculated separately because they are different output columns in CSV/Markdown.
     if ($HasDotNetOrCom) {
         return 'Bloqueo SaaS; requiere rediseño'
     }
@@ -84,6 +94,7 @@ function Get-RiskLevel {
         [bool]$HasDotNetOrCom
     )
 
+    # Strategy and risk are calculated separately because they are different output columns in CSV/Markdown.
     if ($HasDotNetOrCom) {
         return 'High'
     }
@@ -128,10 +139,10 @@ function ConvertTo-MarkdownTable {
 }
 
 if (-not (Test-Path -LiteralPath $StandardPath -PathType Container)) {
-    throw "No existe la carpeta standard: $StandardPath"
+    throw "No existe la carpeta standard: $StandardPath. Primero ejecuta split-nav-objects.ps1 para generar la separación de objetos estándar."
 }
 if (-not (Test-Path -LiteralPath $CustomerPath -PathType Container)) {
-    throw "No existe la carpeta customer: $CustomerPath"
+    throw "No existe la carpeta customer: $CustomerPath. Primero ejecuta split-nav-objects.ps1 para generar la separación de objetos cliente."
 }
 
 $stdFiles = Get-ChildItem -LiteralPath $StandardPath -Filter '*.txt' -File
@@ -158,7 +169,14 @@ foreach ($file in $custFiles) {
     }
 }
 
-$allKeys = ($stdMap.Keys + $custMap.Keys) | Sort-Object -Unique
+$allKeySet = [System.Collections.Generic.HashSet[string]]::new()
+foreach ($k in $stdMap.Keys) {
+    $null = $allKeySet.Add([string]$k)
+}
+foreach ($k in $custMap.Keys) {
+    $null = $allKeySet.Add([string]$k)
+}
+$allKeys = @($allKeySet) | Sort-Object
 $rows = New-Object System.Collections.Generic.List[object]
 
 foreach ($key in $allKeys) {
@@ -229,16 +247,18 @@ if ($outputMdDir -and -not (Test-Path -LiteralPath $outputMdDir)) {
     New-Item -ItemType Directory -Path $outputMdDir -Force | Out-Null
 }
 
-$rows | Sort-Object 'Object Type', 'Object ID' | Export-Csv -LiteralPath $OutputCsv -NoTypeInformation -Encoding utf8BOM
+$sortedRows = $rows | Sort-Object 'Object Type', 'Object ID'
+$csvLines = $sortedRows | ConvertTo-Csv -NoTypeInformation
+Write-Utf8NoBomLines -Path $OutputCsv -Lines $csvLines
 
 $mdLines = @(
     '# Inventario diferencial NAV 2016 estándar vs cliente'
     ''
     "> Generado: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
     ''
-) + (ConvertTo-MarkdownTable -Rows ($rows | Sort-Object 'Object Type', 'Object ID'))
+) + (ConvertTo-MarkdownTable -Rows $sortedRows)
 
-Set-Content -LiteralPath $OutputMarkdown -Value $mdLines -Encoding utf8BOM
+Write-Utf8NoBomLines -Path $OutputMarkdown -Lines $mdLines
 
 Write-Host "CSV generado: $OutputCsv"
 Write-Host "Markdown generado: $OutputMarkdown"
