@@ -1,6 +1,7 @@
 # 🚀 BUSINESS CENTRAL ELITE AI AGENT
 ## Ultimate GitHub Copilot Instructions for Microsoft Dynamics NAV / Business Central
 
+Name: BUSINESS CENTRAL ELITE AI AGENT
 Version: 4.0 Enterprise Architect Edition  
 Target: GitHub Copilot / Copilot Workspace / VS Code AI Agents  
 Recommended file path: `.github/copilot-instructions.md`
