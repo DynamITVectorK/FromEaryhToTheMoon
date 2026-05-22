@@ -103,9 +103,8 @@ foreach ($obj in $objects) {
     $targetPath = Join-Path -Path $datasetFolder -ChildPath $fileName
 
     if ($PSCmdlet.ShouldProcess($targetPath, "Escribir objeto $($obj.Type) $($obj.Id)")) {
-        Set-Content -LiteralPath $targetPath -Value $obj.Lines -Encoding UTF8
+        Set-Content -LiteralPath $targetPath -Value $obj.Lines -Encoding utf8BOM
     }
 }
 
 Write-Host "Separación completada. Salida: $datasetFolder"
-

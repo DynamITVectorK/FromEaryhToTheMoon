@@ -37,7 +37,7 @@ function Read-NavObjectFile {
         ObjectName       = $matches[3].Trim()
         FilePath         = $File.FullName
         Hash             = (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash
-        HasDotNetOrCom   = ($raw -match '(?i)\bDotNet\b|\bAutomation\b|\bCOM\b')
+        HasDotNetOrCom   = ($raw -match '(?i)\bDotNet\b|DotNet(?=[\.\(])|\bAutomation\b|\bCOM\b')
     }
 }
 
@@ -229,7 +229,7 @@ if ($outputMdDir -and -not (Test-Path -LiteralPath $outputMdDir)) {
     New-Item -ItemType Directory -Path $outputMdDir -Force | Out-Null
 }
 
-$rows | Sort-Object 'Object Type', 'Object ID' | Export-Csv -LiteralPath $OutputCsv -NoTypeInformation -Encoding UTF8
+$rows | Sort-Object 'Object Type', 'Object ID' | Export-Csv -LiteralPath $OutputCsv -NoTypeInformation -Encoding utf8BOM
 
 $mdLines = @(
     '# Inventario diferencial NAV 2016 estándar vs cliente'
@@ -238,9 +238,8 @@ $mdLines = @(
     ''
 ) + (ConvertTo-MarkdownTable -Rows ($rows | Sort-Object 'Object Type', 'Object ID'))
 
-Set-Content -LiteralPath $OutputMarkdown -Value $mdLines -Encoding UTF8
+Set-Content -LiteralPath $OutputMarkdown -Value $mdLines -Encoding utf8BOM
 
 Write-Host "CSV generado: $OutputCsv"
 Write-Host "Markdown generado: $OutputMarkdown"
 Write-Host "Total de filas: $($rows.Count)"
-

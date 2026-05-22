@@ -101,7 +101,7 @@ if ($DryRun) {
 }
 
 if ($PSCmdlet.ShouldProcess($InventoryFile, 'Actualizar inventario diferencial en Markdown')) {
-    Set-Content -LiteralPath $InventoryFile -Value $updatedContent -Encoding UTF8
+    Set-Content -LiteralPath $InventoryFile -Value $updatedContent -Encoding utf8BOM
 }
 
 Write-Host "Documento actualizado: $InventoryFile"
