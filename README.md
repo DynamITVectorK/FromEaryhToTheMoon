@@ -52,12 +52,6 @@ Se incorporó una base de documentación para capacitación:
 2. Revisar alcance (`00-project-management/SCOPE.md`) y riesgos (`00-project-management/RISKS.md`).
 3. Priorizar backlog técnico con `01-assessment` + `03-conversion`.
 
-## Próximos pasos recomendados (30-60-90 días)
-
-Para continuar con una ejecución pragmática del proyecto, se añadió una hoja de ruta operativa:
-
-- `upgrade-project/00-project-management/NEXT-STEPS-90-DAYS.md`
-
 ## CI/CD (AL-Go)
 
 El repositorio mantiene estructura compatible con AL-Go.  
